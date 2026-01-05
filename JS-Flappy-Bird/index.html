@@ -4,12 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>FlappyBird</title>
+    <title>MrpBird</title>
     <link rel="stylesheet" href="style.css" > 
     <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet">
 </head>
 <body>
     <canvas id="canvas" width="276" height="414"></canvas>
+    
+    <!-- NUOVO CONTENITORE PER LA PIOGGIA -->
+    <div id="rain-container"></div>
+    <!-- FINE NUOVO CONTENITORE -->
+
+    <!-- NUOVO ELEMENTO PER LA SCRITTA AUGURI! -->
+    <img id="auguri-text" src="img/auguri.png" style="display:none; position:fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 150px;">
+    <!-- FINE NUOVO ELEMENTO -->
+
     <script src="game.js"></script>
+    <!-- AGGIUNGIAMO ANCHE UN NUOVO FILE PER IL CODICE DELLA PIOGGIA -->
+    <script src="rain.js"></script> 
 </body>
 </html>

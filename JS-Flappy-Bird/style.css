@@ -1,9 +1,35 @@
+html, body {
+    height: 100%; 
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7; 
+}
+
 #canvas
 {
     background-color:#30c0df;
     border: 2px solid black;
-    display: block;
-    margin: auto;
     padding: auto;
-    
+    z-index: 10; 
+    position: relative;
+}
+
+/* Contenitore per le immagini a cascata (copre tutto lo schermo, Dietro il canvas) */
+#rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; 
+    pointer-events: none; 
+}
+
+/* Scritta Auguri (posizionata con position:fixed) */
+#auguri-text {
+    z-index: 1000;
 }
