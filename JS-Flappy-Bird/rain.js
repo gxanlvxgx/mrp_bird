@@ -1,26 +1,24 @@
 const RAIN_CONTAINER = document.getElementById('rain-container');
 const AUGURI_TEXT = document.getElementById('auguri-text');
-const CANVAS = document.getElementById('canvas'); // NUOVO: Riferimento al canvas
+const CANVAS = document.getElementById('canvas'); 
 
 // I percorsi dei tuoi 3 PNG per la pioggia.
 const RAIN_ASSETS = [
     'img/siga.png', 
     'img/maria.png', 
-    'img/hellokitty.png', 
+    'img/hellokitty.png', // L'asset che vogliamo ingrandire
 ];
 
 let rainInterval;
 let assetIndex = 0;
 
-// NUOVO: Funzione per calcolare la posizione Y di arresto
 function getYStop() {
-    if (!CANVAS) return document.body.scrollHeight; // Fallback
+    if (!CANVAS) return document.body.scrollHeight;
     
     // 1. Ottieni la posizione del canvas rispetto alla finestra
     const rect = CANVAS.getBoundingClientRect();
     
     // 2. Calcola dove le immagini devono atterrare: la base del canvas + un margine (es. 20px)
-    // Usiamo rect.top + rect.height per ottenere la base del canvas
     return rect.top + rect.height + 20; 
 }
 
@@ -33,8 +31,15 @@ function createRaindrop() {
     const raindrop = document.createElement('img');
     raindrop.src = assetPath;
     
-    // Dimensione e posizioni iniziali
-    const size = Math.floor(Math.random() * 20) + 30; // Dimensione tra 30px e 50px
+    // Dimensione base (casuale tra 30px e 50px)
+    let size = Math.floor(Math.random() * 20) + 30; 
+    
+    // NUOVA LOGICA: Raddoppia la dimensione se l'asset è hellokitty
+    if (assetPath.includes('hellokitty.png')) {
+        size = size * 3; // Raddoppia la dimensione
+    }
+    // FINE NUOVA LOGICA
+    
     const initialX = Math.random() * window.innerWidth;
     
     raindrop.style.cssText = `
@@ -42,7 +47,7 @@ function createRaindrop() {
         width: ${size}px;
         height: ${size}px;
         left: ${initialX}px;
-        top: -${size}px; /* INIZIA IN ALTO */
+        top: -${size}px; 
         opacity: 0.8; 
         pointer-events: none;
         z-index: -10; 
@@ -55,33 +60,27 @@ function createRaindrop() {
 }
 
 function animateRaindrop(element, size) {
-    const duration = Math.random() * 3 + 4; // Durata caduta tra 4 e 7 secondi
-    const yStopPosition = getYStop(); // Calcola la posizione Y del "muro"
+    const duration = Math.random() * 3 + 4; 
+    const yStopPosition = getYStop(); 
     
-    // La trasformazione deve spostare l'elemento da top: -size a yStopPosition.
-    // Il valore di translateY deve essere: (yStopPosition + size)
+    // Calcolo del valore di translateY
     const translateY_value = yStopPosition + size; 
     
     const rotationEnd = (Math.random() > 0.5 ? 360 : -360) * (Math.random() * 2 + 1); 
 
-    // Applicazione della transizione per l'animazione di caduta
     element.style.transition = `transform ${duration}s linear`;
     
-    // Y POSITIVO SIGNIFICA CADERE VERSO IL BASSO
     element.style.transform = `translateY(${translateY_value}px) rotate(${rotationEnd}deg)`;
 
-    // Logica per ricreare la goccia una volta caduta
     element.addEventListener('transitionend', function handler() {
         element.removeEventListener('transitionend', handler);
         element.remove();
         
-        // Ricrea immediatamente per mantenere il ciclo
         if (UI.rainActive) {
             createRaindrop(); 
         }
     });
 
-    // Fallback per la rimozione
     setTimeout(() => {
         if (element.parentNode) {
             element.remove();
@@ -90,29 +89,22 @@ function animateRaindrop(element, size) {
 }
 
 
-// Funzione chiamata da game.js per iniziare la pioggia (punteggio >= 10)
 function startRainEffect() {
-    // Mostra la scritta AUGURI
     AUGURI_TEXT.style.display = 'block'; 
     
     if (!rainInterval) {
-        // Tasso di spawn: 6 al secondo (1 ogni 166ms)
         const SPAWN_RATE = 1000 / 6; 
         
-        // Avviamo la pioggia
         rainInterval = setInterval(createRaindrop, SPAWN_RATE); 
     }
 }
 
-// Funzione chiamata da game.js per fermare l'effetto (Game Over)
 function stopRainEffect() {
-    // Nascondi la scritta AUGURI
     AUGURI_TEXT.style.display = 'none'; 
     
     if (rainInterval) {
         clearInterval(rainInterval);
         rainInterval = null;
-        // Rimuovi tutti gli elementi animati rimanenti
         RAIN_CONTAINER.innerHTML = ''; 
     }
 }
