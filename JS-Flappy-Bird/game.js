@@ -7,6 +7,7 @@ scrn.addEventListener("click", () => {
     case state.getReady:
       state.curr = state.Play;
       SFX.start.play();
+      SFX.bgm.play();
       break;
     case state.Play:
       bird.flap();
@@ -29,6 +30,7 @@ scrn.onkeydown = function keyDown(e) {
       case state.getReady:
         state.curr = state.Play;
         SFX.start.play();
+        SFX.bgm.play();
         break;
       case state.Play:
         bird.flap();
@@ -59,6 +61,7 @@ const SFX = {
   score: new Audio(),
   hit: new Audio(),
   die: new Audio(),
+  bgm: new Audio(),
   played: false,
 };
 const gnd = {
@@ -312,6 +315,8 @@ SFX.flap.src = "sfx/flap.wav";
 SFX.score.src = "sfx/score.wav";
 SFX.hit.src = "sfx/hit.wav";
 SFX.die.src = "sfx/die.wav";
+SFX.bgm.src = "sfx/song.wav"; 
+SFX.bgm.loop = true; 
 
 function gameLoop() {
   update();
