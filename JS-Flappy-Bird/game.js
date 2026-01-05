@@ -234,9 +234,12 @@ const UI = {
       case state.getReady:
         this.y = parseFloat(scrn.height - this.getReady.sprite.height) / 2;
         this.x = parseFloat(scrn.width - this.getReady.sprite.width) / 2;
-        this.tx = parseFloat(scrn.width - this.tap[0].sprite.width) / 2;
+        // NUOVA POSIZIONE PER "TAP" QUANDO IL GIOCO SI PREPARA
+        // Più a sinistra (-40)
+        this.tx = parseFloat(scrn.width - this.tap[0].sprite.width) / 2 - 20; 
+        // Più in alto (-35)
         this.ty =
-          this.y + this.getReady.sprite.height - this.tap[0].sprite.height;
+          this.y + this.getReady.sprite.height - this.tap[0].sprite.height - 15;
         sctx.drawImage(this.getReady.sprite, this.x, this.y);
         sctx.drawImage(this.tap[this.frame].sprite, this.tx, this.ty);
         break;
