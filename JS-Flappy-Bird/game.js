@@ -18,6 +18,10 @@ scrn.addEventListener("click", () => {
       pipe.pipes = [];
       UI.score.curr = 0;
       SFX.played = false;
+      // NUOVO: Reset stato pioggia/auguri
+      UI.rainActive = false;
+      stopRainEffect(); 
+      // FINE NUOVO
       break;
   }
 });
@@ -40,6 +44,10 @@ scrn.onkeydown = function keyDown(e) {
         pipe.pipes = [];
         UI.score.curr = 0;
         SFX.played = false;
+        // NUOVO: Reset stato pioggia/auguri
+        UI.rainActive = false;
+        stopRainEffect(); 
+        // FINE NUOVO
         break;
     }
   }
@@ -193,7 +201,7 @@ const bird = {
       this.rotatation = Math.min(90, (90 * this.speed) / (this.thrust * 2));
     }
   },
-  collisioned: function () {
+   collisioned: function () {
     if (!pipe.pipes.length) return;
     let bird = this.animations[0].sprite;
     let x = pipe.pipes[0].x;
@@ -212,6 +220,13 @@ const bird = {
         UI.score.curr++;
         SFX.score.play();
         pipe.moved = false;
+
+        // NUOVO: Attivazione della pioggia a 10 punti
+        if (UI.score.curr >= 1 && !UI.rainActive) { // CORRETTO A 10
+            UI.rainActive = true;
+            startRainEffect(); // Funzione definita in rain.js
+        }
+        // FINE NUOVO
       }
     }
   },
@@ -220,6 +235,9 @@ const UI = {
   getReady: { sprite: new Image() },
   gameOver: { sprite: new Image() },
   tap: [{ sprite: new Image() }, { sprite: new Image() }],
+  // NUOVO: Stato per la pioggia
+  rainActive: false,
+  // FINE NUOVO
   score: {
     curr: 0,
     best: 0,
@@ -235,9 +253,9 @@ const UI = {
         this.y = parseFloat(scrn.height - this.getReady.sprite.height) / 2;
         this.x = parseFloat(scrn.width - this.getReady.sprite.width) / 2;
         // NUOVA POSIZIONE PER "TAP" QUANDO IL GIOCO SI PREPARA
-        // Più a sinistra (-40)
+        // Più a sinistra (-20)
         this.tx = parseFloat(scrn.width - this.tap[0].sprite.width) / 2 - 20; 
-        // Più in alto (-35)
+        // Più in alto (-15)
         this.ty =
           this.y + this.getReady.sprite.height - this.tap[0].sprite.height - 15;
         sctx.drawImage(this.getReady.sprite, this.x, this.y);
